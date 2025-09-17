@@ -5,5 +5,3 @@ class BaseDataModel:
         
         self.settings = get_settings()
         self.db_client = db_client
-        
-    
