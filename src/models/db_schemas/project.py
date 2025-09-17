@@ -3,9 +3,8 @@ from typing import Optional
 from bson.objectid import ObjectId
 
 class ProjectDBSchema(BaseModel):
-    _id: Optional[ObjectId]
+    id: Optional[ObjectId] = Field(None, alias="_id")
     project_id: str = Field(..., min_length=1)
-    project_name: str
     
     @validator("project_id")
     def validate_project_id(cls, value):
