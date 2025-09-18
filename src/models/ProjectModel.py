@@ -1,8 +1,6 @@
 from .BaseDataModel import BaseDataModel
 from .db_schemas import ProjectDBSchema
 from .enums.DataBaseEnum import DataBaseEnum
-from pymongo import InsertOne
-from typing import List
 
 class ProjectModel(BaseDataModel):
     
@@ -10,11 +8,30 @@ class ProjectModel(BaseDataModel):
         
         super().__init__(db_client)
         self.collection = self.db_client[DataBaseEnum.COLLECTION_PROJECT_NAME.value]
+        
+    @classmethod
+    async def create_instance(cls, db_client: object):
+        instance = cls(db_client)
+        await instance.init_connection()
+        return instance
+        
+    async def init_connection(self):
+        all_connections = await self.db_client.list_collection_names()
+        if DataBaseEnum.COLLECTION_PROJECT_NAME.value not in all_connections:
+
+            self.collection = self.db_client[DataBaseEnum.COLLECTION_PROJECT_NAME.value]
+            indexes = ProjectDBSchema.get_indexes()
+            for index in indexes:
+                await self.collection.create_index(
+                    index["keys"], 
+                    name=index["name"], 
+                    unique=index["unique"]
+                )
 
     async def create_project(self, project: ProjectDBSchema):
         
         result = await self.collection.insert_one(project.dict(by_alias=True, exclude_unset=True))
-        project._id = result.inserted_id
+        project.id = result.inserted_id
 
         return project
         
