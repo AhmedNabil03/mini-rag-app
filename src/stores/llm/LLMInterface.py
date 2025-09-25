@@ -17,7 +17,7 @@ class LLMInterface(ABC):
         pass
     
     @abstractmethod
-    def generate_embeddings(self, text: str, document_type: str = None):
+    def embed_text(self, text: str, document_type: str = None):
         pass
 
     @abstractmethod
