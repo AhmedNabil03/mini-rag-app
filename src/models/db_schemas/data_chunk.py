@@ -24,3 +24,7 @@ class DataChunkDBSchema(BaseModel):
                 "unique": False
             }
         ]
+
+class RetrievedDocumentSchema(BaseModel):
+    text: str
+    score: float
