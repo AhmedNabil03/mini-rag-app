@@ -15,5 +15,7 @@ class ResponseSignal(Enum):
     INSERT_INTO_VECTORDB_ERROR = "Insert into vectordb error"
     INSERT_INTO_VECTORDB_SUCCESS = "Insert into vectordb success"
     VECTORDB_COLLECTION_RETRIEVED = "VectorDB collection retrieved successfully"
-    VECTORDB_SEARCH_ERROR = "Error while searching VectorDB collection"
     VECTORDB_SEARCH_SUCCESS = "VectorDB search success"
+    VECTORDB_SEARCH_ERROR = "Error while searching VectorDB collection"
+    RAG_ANSWER_SUCCESS = "RAG answer success"
+    RAG_ANSWER_ERROR = "RAG answer error"
