@@ -112,7 +112,7 @@ async def process_endpoint(project_id: int, process_request: ProcessRequest, req
             asset_project_id=project.project_id,
             asset_type=AssetTypeEnum.FILE.value
         )
-        project_files_ids = {asset.asset_project_id: asset.asset_name for asset in project_assets}
+        project_files_ids = {asset.asset_id: asset.asset_name for asset in project_assets}
         
     if len(project_files_ids) == 0:
         return JSONResponse(

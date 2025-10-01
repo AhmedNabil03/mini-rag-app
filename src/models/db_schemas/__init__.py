@@ -1,6 +1,4 @@
-from db_schemas.minirag.schemas import (
-    Project as ProjectDBSchema,
-    DataChunk as DataChunkSchema,
-    Asset as Asset,
-    RetrievedDocument as RetrievedDocumentSchema
-)
+from .minirag.schemas import Project as ProjectDBSchema
+from .minirag.schemas import DataChunk as DataChunkDBSchema
+from .minirag.schemas import Asset
+from .minirag.schemas import RetrievedDocument as RetrievedDocumentSchema
