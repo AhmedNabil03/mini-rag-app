@@ -1,8 +1,8 @@
-import os
 from .BaseController import BaseController
+from .ProjectController import ProjectController
 from fastapi import UploadFile
 from models import ResponseSignal
-from .ProjectController import ProjectController
+import os
 import re
 
 class DataController(BaseController):
@@ -25,7 +25,7 @@ class DataController(BaseController):
         random_key = self.generate_random_string()
         project_path = ProjectController().get_project_path(project_id=project_id)
         
-        cleaned_filename = self.get_clean_filename(original_filename)
+        cleaned_filename = self.get_clean_filename(original_filename=original_filename)
         
         new_file_path = os.path.join(
             project_path, 
@@ -43,7 +43,7 @@ class DataController(BaseController):
 
     def get_clean_filename(self, original_filename: str) -> str:
 
-        cleaned_filename = re.sub(r'[^\w.]', '', original_filename)
+        cleaned_filename = re.sub(r'[^\w.]', '', original_filename.strip())
         cleaned_filename = cleaned_filename.replace(' ', '_')
         
         return cleaned_filename

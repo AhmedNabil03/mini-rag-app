@@ -32,7 +32,7 @@ async def index_project(request: Request, project_id: int, push_request: PushReq
             )
         
     nlp_controller = NLPController(
-        vectordb_client=request.app.vector_db_client, 
+        vectordb_client=request.app.vectordb_client, 
         generation_client=request.app.generation_client, 
         embedding_client=request.app.embedding_client,
         template_parser=request.app.template_parser
@@ -46,7 +46,7 @@ async def index_project(request: Request, project_id: int, push_request: PushReq
     # create collection if not exists
     collection_name = nlp_controller.create_collection_name(project_id=project.project_id)
 
-    _ = await request.app.vector_db_client.create_collection(
+    _ = await request.app.vectordb_client.create_collection(
         collection_name=collection_name,
         embedding_size=request.app.embedding_client.embedding_size,
         do_reset=push_request.do_reset,
@@ -105,7 +105,7 @@ async def get_project_index_info(request: Request, project_id: int):
     )
 
     nlp_controller = NLPController(
-        vectordb_client=request.app.vector_db_client,
+        vectordb_client=request.app.vectordb_client,
         generation_client=request.app.generation_client,
         embedding_client=request.app.embedding_client,
         template_parser=request.app.template_parser
@@ -132,7 +132,7 @@ async def search_index(request: Request, project_id: int, search_request: Search
     )
 
     nlp_controller = NLPController(
-        vectordb_client=request.app.vector_db_client,
+        vectordb_client=request.app.vectordb_client,
         generation_client=request.app.generation_client,
         embedding_client=request.app.embedding_client,
         template_parser=request.app.template_parser
@@ -169,7 +169,7 @@ async def answer_rag(request: Request, project_id: int, search_request: SearchRe
     )
 
     nlp_controller = NLPController(
-        vectordb_client=request.app.vector_db_client,
+        vectordb_client=request.app.vectordb_client,
         generation_client=request.app.generation_client,
         embedding_client=request.app.embedding_client,
         template_parser=request.app.template_parser,

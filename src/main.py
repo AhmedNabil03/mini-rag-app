@@ -29,8 +29,8 @@ async def startup_span():
     app.embedding_client.set_embedding_model(model_id=settings.EMBEDDING_MODEL_ID,
                                              embedding_size=settings.EMBEDDING_MODEL_SIZE)
     
-    app.vector_db_client = vector_db_provider_factory.create(provider=settings.VECTOR_DB_BACKEND)
-    await app.vector_db_client.connect()
+    app.vectordb_client = vector_db_provider_factory.create(provider=settings.VECTOR_DB_BACKEND)
+    await app.vectordb_client.connect()
     
     app.template_parser = TemplateParser(
         language=settings.PRIMARY_LANG,
@@ -39,7 +39,7 @@ async def startup_span():
 
 async def shutdown_span():
     app.db_engine.dispose()
-    await app.vector_db_client.disconnect()
+    await app.vectordb_client.disconnect()
 
 app.on_event("startup")(startup_span)
 app.on_event("shutdown")(shutdown_span)

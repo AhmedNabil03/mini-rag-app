@@ -1,6 +1,5 @@
 from .BaseDataModel import BaseDataModel
-from .db_schemas import Asset
-from .enums.DataBaseEnum import DataBaseEnum
+from .db_schemas import AssetDBSchema
 from bson.objectid import ObjectId
 from sqlalchemy.future import select
 
@@ -15,7 +14,7 @@ class AssetModel(BaseDataModel):
         instance = cls(db_client)
         return instance
 
-    async def create_asset(self, asset: Asset):
+    async def create_asset(self, asset: AssetDBSchema):
 
         async with self.db_client() as session:
             async with session.begin():
@@ -27,9 +26,9 @@ class AssetModel(BaseDataModel):
     async def get_all_project_assets(self, asset_project_id: str, asset_type: str):
 
         async with self.db_client() as session:
-            stmt = select(Asset).where(
-                Asset.asset_project_id == asset_project_id,
-                Asset.asset_type == asset_type
+            stmt = select(AssetDBSchema).where(
+                AssetDBSchema.asset_project_id == asset_project_id,
+                AssetDBSchema.asset_type == asset_type
             )
             result = await session.execute(stmt)
             records = result.scalars().all()
@@ -38,9 +37,9 @@ class AssetModel(BaseDataModel):
     async def get_asset_record(self, asset_project_id: str, asset_name: str):
 
         async with self.db_client() as session:
-            stmt = select(Asset).where(
-                Asset.asset_project_id == asset_project_id,
-                Asset.asset_name == asset_name
+            stmt = select(AssetDBSchema).where(
+                AssetDBSchema.asset_project_id == asset_project_id,
+                AssetDBSchema.asset_name == asset_name
             )
             result = await session.execute(stmt)
             record = result.scalar_one_or_none()

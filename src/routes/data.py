@@ -9,7 +9,7 @@ import logging
 from .schemas.data import ProcessRequest
 from models.ProjectModel import ProjectModel
 from models.AssetModel import AssetModel
-from models.db_schemas import DataChunkDBSchema, Asset
+from models.db_schemas import DataChunkDBSchema, AssetDBSchema
 from models.ChunkModel import ChunkModel
 from models.enums.AssetTypeEnum import AssetTypeEnum
 from bson.objectid import ObjectId
@@ -63,7 +63,7 @@ async def upload_data(request: Request,
     
     # Create asset record
     asset_model = await AssetModel.create_instance(db_client=request.app.db_client)
-    asset_resource = Asset(
+    asset_resource = AssetDBSchema(
         asset_project_id=project.project_id,
         asset_type=AssetTypeEnum.FILE.value,
         asset_name=file_id,
@@ -82,7 +82,7 @@ async def upload_data(request: Request,
 async def process_endpoint(project_id: int, process_request: ProcessRequest, request: Request):
     
     chunk_size = process_request.chunk_size
-    overlap_size = process_request.Overlap_size
+    overlap_size = process_request.overlap_size
     do_reset = process_request.do_reset
 
     project_model = await ProjectModel.create_instance(db_client=request.app.db_client)
@@ -92,13 +92,13 @@ async def process_endpoint(project_id: int, process_request: ProcessRequest, req
     asset_model = await AssetModel.create_instance(db_client=request.app.db_client)
     
     nlp_controller = NLPController(
-        vectordb_client=request.app.vector_db_client,
+        vectordb_client=request.app.vectordb_client,
         generation_client=request.app.generation_client,
         embedding_client=request.app.embedding_client,
         template_parser=request.app.template_parser,
     )
     
-    if process_request.file_id is not None:
+    if process_request.file_id:
         asset_record = await asset_model.get_asset_record(
             asset_project_id=project.project_id,
             asset_name=process_request.file_id
@@ -136,7 +136,7 @@ async def process_endpoint(project_id: int, process_request: ProcessRequest, req
     if do_reset == 1:
         # delete associated vectors collection
         collection_name = nlp_controller.create_collection_name(project_id=project.project_id)
-        _ = await request.app.vector_db_client.delete_collection(collection_name=collection_name)
+        _ = await request.app.vectordb_client.delete_collection(collection_name=collection_name)
 
         # delete associated chunks
         _ = await chunk_model.delete_chunks_by_project_id(
